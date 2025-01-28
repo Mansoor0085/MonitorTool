@@ -1,0 +1,30 @@
+﻿@* @model List<FileDetails>
+
+<div class="container mt-4">
+    <h2>Uploaded Files</h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>@file.FileName</td>
+                    <td>@file.CreatedAt</td>
+                    <td>
+                        <form action="/Video/DeleteFile" method="post" style="display:inline;">
+                            <input type="hidden" name="fileName" value="@file.FileName" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@

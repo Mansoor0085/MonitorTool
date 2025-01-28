@@ -1,0 +1,42 @@
+﻿@{
+    @model IEnumerable<MonitorTool.Models.Question>
+
+}
+
+<style type="text/css">
+    /* Shaded list items with alternating background colors */
+    .list-group-item:nth-child(odd) {
+        background-color: #f9f9f9; /* Very light gray */
+    }
+
+    .list-group-item:nth-child(even) {
+        background-color: #eef2f7; /* Slightly darker gray */
+    }
+
+    /* Button hover effect */
+    .list-group-item .btn-info:hover {
+        background-color: #2b8aff; /* Lighter blue on hover */
+    }
+
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="text-center mb-4 text-primary">Fill in the Blanks</h2>
+            <ul class="list-group">
+                @foreach (var question in Model)
+                {
+                    <li class="list-group-item mb-3 shadow-sm p-3" style="background-color: #f1f1f1;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold" style="color: #333;">@question.Text</span>
+                            <a href="@Url.Action("Answer", "Questions", new { id = question.Id })" class="btn btn-info btn-sm text-white">
+                                Answer
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

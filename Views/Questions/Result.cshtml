@@ -1,0 +1,20 @@
+﻿
+    @model MonitorTool.Models.Question
+
+    <h3>@Model.Text</h3>
+
+    <p>Your Answer: @Model.UserAnswer</p>
+    <p>
+        @if (ViewBag.IsCorrect)
+        {
+            <strong>Correct!</strong>
+        }
+        else
+        {
+            <strong>Incorrect. The correct answer is: @Model.Answer</strong>
+        }
+    </p>
+
+    <a href="@Url.Action("Index", "Questions")">Back to Questions</a>
+
+

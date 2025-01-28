@@ -1,0 +1,40 @@
+﻿@inject IWebHostEnvironment WebHostEnvironment
+@{
+    ViewBag.Title = "Uploaded Files";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Uploaded Files</h2>
+
+    @if (ViewBag.Files != null && ViewBag.Files.Count > 0)
+    {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var file in ViewBag.Files)
+                {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Content("~/UploadedFiles/" + file)" target="_blank">@file</a>
+                                </td>
+                                <td>
+                                    <form action="/File/Delete" method="post" style="display: inline;">
+                                        <input type="hidden" name="fileName" value="@file" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                }
+                </tbody>
+            </table>
+    }
+    else
+    {
+            <p>No files found.</p>
+    }
+</div>

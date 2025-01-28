@@ -1,0 +1,56 @@
+﻿@model List<dynamic>
+
+<div class="container mt-4">
+    <h2>Uploaded Files</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Content($"~/UploadedFiles/{file.Name}")" target="_blank">
+                            @file.Name
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger delete-file" data-filename="@file.Name">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.querySelectorAll('.delete-file').forEach(button => {
+        button.addEventListener('click', async (e) => {
+            const fileName = e.target.getAttribute('data-filename');
+            if (confirm(`Are you sure you want to delete ${fileName}?`)) {
+                try {
+                    const response = await fetch('/File/Delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fileName }),
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        alert(result.message);
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                } catch (error) {
+                    console.error("Error deleting file:", error);
+                    alert("An error occurred while deleting the file.");
+                }
+            }
+        });
+    });
+</script>

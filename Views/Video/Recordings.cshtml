@@ -1,0 +1,58 @@
+﻿@inject IWebHostEnvironment WebHostEnvironment
+@{
+    ViewBag.Title = "Recordings List";
+    string videoDirectory = System.IO.Path.Combine(WebHostEnvironment.WebRootPath, "UploadedVideos");
+
+}
+
+
+<div class="container mt-4">
+    <h2 class="mb-4">Uploaded Videos</h2>
+
+    @if (ViewBag.Videos != null && ViewBag.Videos.Count > 0)
+    {
+        <!-- Table to display video names with delete button -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Sl #</th>
+                    <th scope="col">Video Name</th>
+                    <th scope="col">Created at</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var video in ViewBag.Videos)
+                {
+                    var filePath = System.IO.Path.Combine(videoDirectory, video);
+
+                    var createdAt = System.IO.File.Exists(filePath)
+                    ? System.IO.File.GetCreationTime(filePath).ToString("yyyy-MM-dd HH:mm:ss")
+                    : "Unknown";
+                    <tr>
+                        <th scope="row">@((ViewBag.Videos.IndexOf(video) + 1))</th>
+                        <td>
+                            <!-- Video Name with link to open the video -->
+                            <a href="@Url.Content("~/UploadedVideos/" + video)" target="_blank">@video</a>
+                        </td>
+                        <td>
+                            <!-- Created At -->
+                            @createdAt
+                        </td>
+                        <td>
+                            <!-- Delete Button -->
+                            <form action="/Video/Delete" method="post" style="display: inline;">
+                                <input type="hidden" name="fileName" value="@video" />
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No videos found.</p>
+    }
+</div>

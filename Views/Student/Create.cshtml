@@ -1,0 +1,39 @@
+﻿@model MonitorTool.Models.Student
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3>Create Student</h3>
+<div class="row"> 
+    <div class=" col-md-4"> 
+
+    <form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Id" class="control-label"></label>
+        <input asp-for="Id" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Name">Student Name</label>
+        <input asp-for="Name" class="form-control"  placeholder="Name">
+    </div>
+    <div class="form-group">
+        <label asp-for="Gender" class="control-label">Gender</label>
+        <input asp-for="Gender" type="text" class="form-control" aria-describedby="emailHelp" >
+        @* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> *@
+    </div>
+    <div class="form-group">
+        <label asp-for="Age" class="control-label">Age</label>
+        <input asp-for="Age" class="form-control" >
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">Email</label>
+        <input asp-for="Email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+    </div>
+    
+    <div class="form-group">
+        <input type="submit" value="Add" class="btn btn-primary" />
+    </div>
+    </form>
+    </div>
+</div>

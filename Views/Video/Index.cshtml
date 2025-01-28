@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Video Upload Feature";
+}
+
+<style>
+    .btn-custom {
+        width: 150px; /* Set a fixed width */
+        height: 40px; /* Set a fixed height */
+        font-size: 16px; /* Ensure consistent font size */
+        padding: 8px; /* Set consistent padding */
+        text-align: center; /* Center text */
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Video Recording Section -->
+    <h2 class="mb-4">Video Recording</h2>
+    <div class="d-flex gap-4 mb-3">
+        <a href="/Video/Recordings" class="btn btn-info btn-custom">View Recordings</a>
+        <a href="/File/Files" class="btn btn-secondary btn-custom">View Files</a>
+        <button id="startRecording" class="btn btn-primary btn-custom">Start Recording</button>
+        <button id="stopRecording" class="btn btn-danger btn-custom" disabled>Stop Recording</button>
+    </div>
+    <video id="preview" autoplay muted></video>
+
+    <hr />
+
+    <!-- Upload Videos Section -->
+    <h2 class="mt-5 mb-4">Upload Videos here</h2>
+    <form id="uploadForm" action="/Video/Upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="videoFile" accept="video/*" />
+        <button type="submit" class="btn btn-success btn-custom">Upload Video</button>
+    </form>
+
+    <!-- Upload Files Section -->
+    <h2 class="mt-5 mb-4">Upload Files here</h2>
+    <form id="fileUploadForm" action="/File/Upload" enctype="multipart/form-data" method="post">
+        <input type="file" name="file" accept="/*">
+        <button type="submit" class="btn btn-primary btn-custom">Upload File</button>
+    </form>
+</div>
+
+<script>
+    // Video recording logic
+    let mediaRecorder;
+    let recordedChunks = [];
+    const startButton = document.getElementById('startRecording');
+    const stopButton = document.getElementById('stopRecording');
+    const preview = document.getElementById('preview');
+
+    startButton.addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+
+                // Preview the recorded video
+                preview.srcObject = null;
+                preview.src = url;
+
+                // Automatically download the video
+                const downloadLink = document.createElement("a");
+                downloadLink.href = url;
+                downloadLink.download = "recorded-video.webm";
+                downloadLink.click();
+
+                recordedChunks = [];
+            };
+
+            mediaRecorder.start();
+            preview.srcObject = stream;
+
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        } catch (err) {
+            console.error("Error accessing media devices.", err);
+        }
+    });
+
+    stopButton.addEventListener('click', () => {
+        mediaRecorder.stop();
+        preview.srcObject.getTracks().forEach(track => track.stop());
+
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    });
+</script>

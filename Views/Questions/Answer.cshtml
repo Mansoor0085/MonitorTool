@@ -1,0 +1,11 @@
+﻿@model MonitorTool.Models.Question
+
+    <h3>@Model.Text</h3>
+
+    <form asp-action="Answer" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <label>Answer: <input type="text" name="userAnswer" /></label>
+        <button type="submit">Submit</button>
+    </form>
+
+
